@@ -4,7 +4,6 @@ import (
 	"log"
 	"net/http"
 	"github.com/clandau/microsvcs-in-go/product-api/data"
-	"encoding/json"
 )
 
 type Products struct {
@@ -17,10 +16,8 @@ func NewProducts(l *log.Logger) *Products {
 
 func (p *Products) ServeHTTP(rw http.ResponseWriter, r *http.Request) {
 	lp := data.GetProducts()
-	d, err := json.Marshal(lp)
+	err := lp.ToJSON(rw)
 	if err != nil {
 		http.Error(rw, "Unable to Marshal JSON", http.StatusInternalServerError)
 	}
-
-	rw.Write(d)
 }
